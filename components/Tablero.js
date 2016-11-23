@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
   tablero: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+  //  backgroundColor: 'paleturquoise'
   },
   fila: {
     flex: 1,

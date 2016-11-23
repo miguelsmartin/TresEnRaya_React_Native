@@ -1,5 +1,22 @@
 import React, { Component } from 'react';
-import {TouchableHighlight, Text} from 'react-native';
+import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
+
+const styles = StyleSheet.create({
+  viewborde: {
+    borderColor: 'black'
+  },
+  textoBoton: {
+    color: "midnightblue"
+  },
+  boton:{
+    justifyContent: 'center',
+    marginTop:5,
+    alignItems: 'center',
+    backgroundColor: 'lightgreen',
+    height: 20
+  }
+});
+
 
 var Boton = React.createClass({
  manejaClick: function(){
@@ -7,9 +24,11 @@ var Boton = React.createClass({
  },
  render: function () {
    return (
-     <TouchableHighlight onPress={this.manejaClick}>
-        <Text>Nueva partida</Text>
-     </TouchableHighlight>
+     <View style={styles.viewborde}>
+       <TouchableHighlight style={styles.boton} onPress={this.manejaClick}>
+          <Text>Nueva partida</Text>
+       </TouchableHighlight>
+     </View>
    )
  }
 });

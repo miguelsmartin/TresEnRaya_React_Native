@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, Text } from 'react-native';
 
 const Cabecera = require('./Cabecera.js');
 const Tablero = require('./Tablero.js');
@@ -10,6 +10,29 @@ const ContadorMov = require('./ContadorMov.js');
 const JUGADORX = "jugador 1 - las X";
 const JUGADOR0 = "jugador 2 - los 0";
 const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
+
+
+const styles = StyleSheet.create({
+  viewborde: {
+    borderColor: 'black'
+  },
+  textoBoton: {
+    color: "black"
+  },
+  boton:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
+    height: 20,
+    marginTop:5
+  },
+  contenedor:{
+    //backgroundColor: 'paleturquoise',
+    flex: 1, margin: 10
+  }
+});
+
+
 
 var App = React.createClass({
 
@@ -45,14 +68,23 @@ var App = React.createClass({
    }
  },
 
+ buttonClick: function(){
+   this.props.navigator.pop();
+ },
+
 render: function () {
  var texto = "Turno del " + this.state.turno;
  return (
-  <View style={{flex: 1, margin: 10}}>
+  <View style={styles.contenedor}>
      <Cabecera texto={texto} turno={this.state.turno} estado={this.state.playingGame}/>
      <ContadorMov texto={this.state.numberMov}/>
      <Tablero valores={this.state.valores} manejadorTableroClick={this.appClick} playingGame ={this.state.playingGame}/>
      <Boton nuevaPartidaClick={this.nuevaPartidaClick}/>
+     <View style={styles.viewborde}>
+       <TouchableHighlight style={styles.boton} onPress={this.buttonClick}>
+         <Text style={styles.textoBoton}>Volver a Inicio</Text>
+       </TouchableHighlight>
+     </View>
   </View>
 )
 },

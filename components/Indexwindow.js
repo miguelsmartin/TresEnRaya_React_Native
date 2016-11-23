@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, TouchableHighlight } from 'react-native';
 
 const styles = StyleSheet.create({
-  cabecera: {
-    padding: 5,
-    fontSize: 25,
-    marginBottom: 20
+  textoBoton: {
+    flex:1,
+    fontSize: 40,
+    paddingTop: 200,
+    paddingRight: 20,
+    paddingLeft: 20,
+    color: "white"
+  },
+  boton:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'mediumturquoise',
   }
 });
 
-var Cabecera = React.createClass({
- render: function () {
-   if (this.props.estado == false) {
-     return(<Text style={styles.cabecera}>"Fin del Juego. Pulse el boton de Nueva Partida."</Text>)
-   }
-    else {
-     return(<Text style={styles.cabecera}>{this.props.texto}</Text>)
-   }
-}});
-module.exports = Cabecera;
+var Indexwindow = React.createClass({
+  render: function () {
+    return(
+      <TouchableHighlight style={styles.boton} onPress={this.onButtonClick}>
+        <Text style={styles.textoBoton}>¡Empezar a jugar!</Text>
+      </TouchableHighlight>)
+  },
+  onButtonClick: function(){
+    this.props.navigator.push({
+      id: 'App'
+    });
+  }
+
+});
+module.exports = Indexwindow;
