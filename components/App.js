@@ -9,8 +9,6 @@ const ContadorMov = require('./ContadorMov.js');
 
 const JUGADORX = "jugador 1 - las X";
 const JUGADOR0 = "jugador 2 - los 0";
-const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
-
 
 const styles = StyleSheet.create({
   viewborde: {
@@ -27,16 +25,14 @@ const styles = StyleSheet.create({
     marginTop:5
   },
   contenedor:{
-    //backgroundColor: 'paleturquoise',
     flex: 1, margin: 10
   }
 });
 
-
-
 var App = React.createClass({
 
  getInitialState: function () {
+   const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
    return {
      turno: JUGADORX,
      valores: VALORES,
@@ -69,10 +65,14 @@ var App = React.createClass({
  },
 
  buttonClick: function(){
+   if(!this.state.playingGame){
+     this.nuevaPartidaClick;
+   }
    this.props.navigator.pop();
  },
 
 render: function () {
+
  var texto = "Turno del " + this.state.turno;
  return (
   <View style={styles.contenedor}>

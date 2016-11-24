@@ -53,35 +53,9 @@ let Casilla = React.createClass({
    render: function () {
      return (
       <TouchableHighlight style={this.selectColor()} onPress={this.casillaClick}
-        disabled={this.props.valor !== "-"}>
+        disabled={(this.props.valor !== "-") || !(this.props.playingGame) }>
           <Text style={styles.casillaStyleText}>{this.props.valor}</Text>
       </TouchableHighlight>)
-
-     /*if (this.props.valor === "-") {
-
-       return (
-         <TouchableOpacity bsStyle="success" style={casillaStyle}  className={((this.props.valor === "-") && this.props.playingGame) ?
-           "clickable" : "no_clickable"} onClick={this.casillaClick}>
-           {this.props.valor} </TouchableOpacity>
-       )
-     }
-     else if (this.props.valor === "0") {
-
-       return (
-         <TouchableOpacity bsStyle="danger"  style={casillaStyle}  className={((this.props.valor === "-") && this.props.playingGame) ?
-           "clickable" : "no_clickable"} onClick={this.casillaClick}>
-           {this.props.valor} </TouchableOpacity>
-       )
-
-     }
-   else {
-     return (
-       <TouchableOpacity bsStyle="primary"  style={casillaStyle}  className={((this.props.valor === "-") && this.props.playingGame) ?
-         "clickable" : "no_clickable"} onClick={this.casillaClick}>
-         {this.props.valor} </TouchableOpacity>
-     )
-
-   }*/
 
 }});
 module.exports = Casilla;
