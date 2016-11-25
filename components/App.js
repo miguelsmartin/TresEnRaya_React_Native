@@ -1,14 +1,18 @@
 
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text } from 'react-native';
+import { Text, AsyncStorage, StyleSheet,ListView, View, TouchableHighlight } from 'react-native';
 
 const Cabecera = require('./Cabecera.js');
 const Tablero = require('./Tablero.js');
 const Boton = require('./Boton.js');
 const ContadorMov = require('./ContadorMov.js');
+const BotonLista = require('./BotonLista.js');
+const Lista = require('./Lista.js');
 
 const JUGADORX = "jugador 1 - las X";
 const JUGADOR0 = "jugador 2 - los 0";
+
+var listaActual = [];
 
 const styles = StyleSheet.create({
   viewborde: {
@@ -25,19 +29,33 @@ const styles = StyleSheet.create({
     marginTop:5
   },
   contenedor:{
+    //backgroundColor: 'paleturquoise',
     flex: 1, margin: 10
+  },
+  saveandload:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'darkkhaki',
+    height: 20,
+    marginTop:5
   }
 });
+
+
 
 var App = React.createClass({
 
  getInitialState: function () {
    const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
+   var listaMov = []; /*declarada aqui por el mismo motivo que valores,
+   no se limpiaba cuando se volvia a pantalla inicial*/
+
    return {
      turno: JUGADORX,
      valores: VALORES,
      playingGame: true,
-     numberMov: 0
+     numberMov: 0,
+     listaMov: listaMov
    };
   },
 
@@ -50,6 +68,19 @@ var App = React.createClass({
      valores: this.state.valores,
      numberMov: this.state.numberMov +1
    });
+
+   /*Borra los datos de la variable listaActual cuando se vuelve
+   a la pantalla de inicio sin reiniciar ya que listaMov se limpia en el init.
+   Basicamente actualiza la variable listaActual con la prop del estado cada vez que se pincha,
+   para evitar asi que la variable contenga algo */
+   listaActual=this.state.listaMov;
+   /*Comentario anterior era solo para la sentencialistaActual=this.state.listaMov;*/
+
+   this.addMov(numeroFila, numeroColumna);
+   this.setState({
+     listaMov: listaActual
+   });
+
    var gameWinner = this.didFinish(this.state.turno, valores);
    if(gameWinner){
       alert("Ganó el: "+gameWinner);
@@ -64,31 +95,74 @@ var App = React.createClass({
    }
  },
 
+//funcion que lo unico que hace es subir la lista de ordenes hacia index
+ upArray: function(){
+   this.props.upArray(this.state.listaMov);
+ },
+
+//añade una fila al array cada vez que se hace algun click
+ addMov: function(numeroFila, numeroColumna){
+    listaActual.push(this.state.turno+" coloca en ["+numeroFila+"],["+numeroColumna+"]");
+    return listaActual;
+ },
+
  buttonClick: function(){
-   if(!this.state.playingGame){
-     this.nuevaPartidaClick;
-   }
    this.props.navigator.pop();
  },
 
-render: function () {
 
+render: function () {
  var texto = "Turno del " + this.state.turno;
  return (
   <View style={styles.contenedor}>
      <Cabecera texto={texto} turno={this.state.turno} estado={this.state.playingGame}/>
      <ContadorMov texto={this.state.numberMov}/>
-     <Tablero valores={this.state.valores} manejadorTableroClick={this.appClick} playingGame ={this.state.playingGame}/>
+     <Tablero valores={this.state.valores} manejadorTableroClick={this.appClick} playingGame ={this.state.playingGame} estado={this.state}/>
      <Boton nuevaPartidaClick={this.nuevaPartidaClick}/>
+     
+     <BotonLista navigator={this.props.navigator} upArray={this.upArray}/>
+
+     <View style={styles.viewborde}>
+         <TouchableHighlight style={styles.saveandload} onPress={this.saveState}>
+           <Text style={styles.textoBoton}>Guardar Partida</Text>
+       </TouchableHighlight>
+     </View>
+
+     <View style={styles.viewborde}>
+         <TouchableHighlight style={styles.saveandload} onPress={this.loadState}>
+           <Text style={styles.textoBoton}>Cargar Partida</Text>
+       </TouchableHighlight>
+     </View>
+
      <View style={styles.viewborde}>
        <TouchableHighlight style={styles.boton} onPress={this.buttonClick}>
          <Text style={styles.textoBoton}>Volver a Inicio</Text>
-       </TouchableHighlight>
-     </View>
+     </TouchableHighlight>
+    </View>
+
   </View>
 )
 },
 
+//guardar y cargar estado unicamente
+ saveState: async function(){
+   try {
+     let stateToSave = JSON.stringify(this.state);
+     await AsyncStorage.setItem('@HelloWorld:state',stateToSave);
+   } catch (error) {
+      }
+ },
+
+ loadState: async function(){
+   try {
+     let stateToLoad = await AsyncStorage.getItem('@HelloWorld:state');
+     if (stateToLoad !== null){
+       let state = JSON.parse(stateToLoad);
+       this.setState(state);
+     }
+   } catch (error) {
+     }
+},
 //Función que comprueba si ganó algún usuario y lo devuelve
  didFinish: function(turno, valores){
   var winner = null;
@@ -121,7 +195,8 @@ render: function () {
      turno: JUGADORX,
      valores: [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']],
      playingGame: true,
-     numberMov: 0
+     numberMov: 0,
+     listaMov: []
    });
  }
 });

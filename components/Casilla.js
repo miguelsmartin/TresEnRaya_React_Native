@@ -52,10 +52,8 @@ let Casilla = React.createClass({
    },
    render: function () {
      return (
-      <TouchableHighlight style={this.selectColor()} onPress={this.casillaClick}
-        disabled={(this.props.valor !== "-") || !(this.props.playingGame) }>
+      <TouchableHighlight style={this.selectColor()} onPress={this.casillaClick} disabled={this.props.valor !== "-"}>
           <Text style={styles.casillaStyleText}>{this.props.valor}</Text>
       </TouchableHighlight>)
-
 }});
 module.exports = Casilla;

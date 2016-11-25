@@ -4,50 +4,41 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+ import React, { Component } from 'react';
+ import { AppRegistry, Navigator } from 'react-native';
+ import App from './components/App';
+ import Indexwindow from './components/Indexwindow'
+ import Lista from './components/Lista'
 
-export default class TresEnRaya extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+ var TresEnRaya = React.createClass({
+   getInitialState: function () {
+     return {
+       listaMov: []
+     };
+    },
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+   render: function(){
+     return(
+       <Navigator initialRoute = {{ id: 'Indexwindow'}} renderScene={this.navigatorRenderScene}/>
+     );
+   },
+   //carga en el prop listaMov de index la lista de movimientos que proviene de App.js
+   upArray: function(listaMov){
+     this.state.listaMov = listaMov;
+   },
+   navigatorRenderScene: function(route, navigator){
+     //_navigator = navigator;
+     switch(route.id){
+       case 'Indexwindow':
+         return(<Indexwindow navigator={navigator} tittle="Indexwindow" />);
+       case 'App':
+       //declara la funcion upArray en App.js
+         return(<App navigator={navigator} upArray={this.upArray} tittle="App" />);
+       case 'Lista':
+       //pasamos la listaMov para ser repesentada en escena correspondiente
+         return(<Lista navigator={navigator} listaMov={this.state.listaMov} tittle="Lista" />);
+     }
+   }
+ });
 
-AppRegistry.registerComponent('TresEnRaya', () => TresEnRaya);
+ AppRegistry.registerComponent('Tresenraya', () => TresEnRaya);
